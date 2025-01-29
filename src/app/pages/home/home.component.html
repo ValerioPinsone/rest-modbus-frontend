@@ -1,0 +1,35 @@
+<form [formGroup]="registersForm">
+    <label for="ip">IP:</label>
+    <input id="ip" type="text" [formControl]="ip"><br>
+  
+    <label for="port">Port:</label>
+    <input id="port" type="number" [formControl]="port"><br>
+  
+    <label for="slave">Slave ID:</label>
+    <input id="slave" type="number" [formControl]="slave"><br>
+  
+    <div formArrayName="registers">
+      <div *ngFor="let register of registersArray.controls; let i = index">
+        <label for="register-{{i}}">Register {{i + 1}}:</label>
+        <input id="register-{{i}}" type="number" [formControlName]="i">
+        <button type="button" (click)="removeRegister(i)">Remove</button>
+      </div>
+    </div>
+    <button type="button" (click)="addRegister()">Add Register</button>
+    <button type="button" (click)="submitForm()">Submit</button>
+  </form>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Register</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let register of registers">
+        <td>{{ register.address }}</td>
+        <td>{{ register.value }}</td>
+      </tr>
+    </tbody>
+  </table>
