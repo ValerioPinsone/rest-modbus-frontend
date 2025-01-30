@@ -1,74 +1,126 @@
-body, html {
-  height: 100%;
-  margin: 0;
+.container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  font-family: Arial, sans-serif;
+  height: 100vh;
+  width: 100%;
 }
 
-form {
+.row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
+}
+
+.column {
+  flex: 50%;
+  padding: 10px;
+}
+
+.column-right {
+  max-height: 605px;
+  overflow-y: scroll;
+
+  /* tiny scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #888 #333;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 4px;
+  color: white;
+  background-color: rgb(70, 70, 70);
+}
+
+.button {
+  background-color: #4caf50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  opacity: 0.8;
+}
+
+.button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.button:disabled:hover {
+  opacity: 1;
+}
+
+.button:active {
+  background-color: #3e8e41;
+}
+
+.button-write {
+  background-color: rgb(219, 120, 0);
+}
+
+.button-write:active {
+  background-color: rgb(147, 81, 0);
+}
+
+.button-write:disabled {
+  background-color: #cccccc8f;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+table {
+  margin-top: 27px;
+  width: 400px;
+  max-height: 200px;
+  overflow-y: scroll;
+  background-color: rgb(237, 237, 237);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 label {
-  margin: 10px 0 5px;
-  font-size: 1.2em;
+  color: rgb(246, 220, 71);
 }
 
-input {
-  width: 300px;
-  padding: 5px;
-  margin-bottom: 15px;
-  font-size: 1.1em;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-button {
-  padding: 5px 10px;
-  font-size: 1.1em;
-  color: #fff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin: 5px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
+.scrivi-registro-container {
+  border: 1px solid gold;
   padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+  margin-top: 20px;
+  border-radius: 10px;
 }
 
-th {
-  background-color: #f2f2f2;
-  font-size: 1.2em;
-}
+@media only screen and (max-width: 600px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
 
-tr:hover {
-  background-color: #f5f5f5;
-}
+  .column {
+    flex: 100%;
+    padding: 5px;
+  }
 
-td {
-  font-size: 1.1em;
+  .form-input {
+    width: 100%;
+    padding: 10px 15px;
+  }
+
+  .button {
+    padding: 10px 15px;
+  }
+
+  table {
+    width: 100%;
+    max-height: 150px;
+  }
 }

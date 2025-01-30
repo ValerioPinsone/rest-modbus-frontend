@@ -1,35 +1,140 @@
-<form [formGroup]="registersForm">
-    <label for="ip">IP:</label>
-    <input id="ip" type="text" [formControl]="ip"><br>
-  
-    <label for="port">Port:</label>
-    <input id="port" type="number" [formControl]="port"><br>
-  
-    <label for="slave">Slave ID:</label>
-    <input id="slave" type="number" [formControl]="slave"><br>
-  
-    <div formArrayName="registers">
-      <div *ngFor="let register of registersArray.controls; let i = index">
-        <label for="register-{{i}}">Register {{i + 1}}:</label>
-        <input id="register-{{i}}" type="number" [formControlName]="i">
-        <button type="button" (click)="removeRegister(i)">Remove</button>
+<div class="container">
+
+  <div class="row">
+    <div class="column">
+
+      <form>
+        <label for="ip">IP:</label>
+        <input
+          id="ip"
+          type="text"
+          [formControl]="ip"
+          class="form-input">
+        <br>
+
+        <label for="port">Port:</label>
+        <input
+          id="port"
+          type="number"
+          [formControl]="port"
+          class="form-input">
+        <br>
+
+        <label for="slave">Slave ID:</label>
+        <input
+          id="slave"
+          type="number"
+          [formControl]="slave"
+          class="form-input">
+        <br>
+
+        <label for="registers">
+          Watchlist Registri (separati da virgola):
+        </label>
+        <input
+          id="registers"
+          type="text"
+          [(ngModel)]="registersInput"
+          name="registers"
+          class="form-input">
+        <br>
+
+        <button
+          type="button"
+          (click)="submitForm()"
+          class="form-input button">
+          Aggiorna
+        </button>
+      </form>
+      <div class="scrivi-registro-container">
+        <form>
+          <label for="registro">Registro:</label>
+          <input
+            id="registro"
+            type="number"
+            [formControl]="registro"
+            class="form-input">
+          <br>
+
+          <label for="valore">Valore:</label>
+          <input
+            id="valore"
+            type="number"
+            [formControl]="valore"
+            class="form-input">
+          <br>
+
+          <button
+            type="button"
+            (click)="writeRegister()"
+            class="form-input button button-write"
+            [disabled]="!registro.value || registro.value <= 0 || valore.value === null || valore.value === undefined">
+            Scrivi Registro {{registro.value}}
+          </button>
+        </form>
       </div>
     </div>
-    <button type="button" (click)="addRegister()">Add Register</button>
-    <button type="button" (click)="submitForm()">Submit</button>
-  </form>
-  
-  <table>
-    <thead>
-      <tr>
-        <th>Register</th>
-        <th>Value</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let register of registers">
-        <td>{{ register.address }}</td>
-        <td>{{ register.value }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <div class="column column-right">
+      <div class="table-container">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8 table">
+          <!-- - Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- Registro Column -->
+          <ng-container matColumnDef="registro">
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+              Registro
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element">
+              {{element.registro}}
+            </td>
+          </ng-container>
+
+          <!-- Valori Column -->
+          <ng-container matColumnDef="valore">
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+              Valore
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element">
+              {{element.valore}}
+            </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="azioni">
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+              Azioni
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element">
+              del
+            </td>
+          </ng-container>
+
+          <tbody>
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns;"></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
