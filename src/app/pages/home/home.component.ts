@@ -94,26 +94,24 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    //this.registers = []; // Resetta i registri prima di ogni polling
     const requests = this.registers.map(register =>
       this.modbusService.readRegister(this.ip.value as any, this.port.value as any, this.slave.value as any, register.address, 1)
     );
 
     forkJoin(requests).subscribe(responses => {
-      responses.forEach(data => {
-        const register = this.registers.find(r => r.address === data.register);
+      responses.forEach((data, index) => {
+        const register = this.registers[index] as any;
         if (register) {
-          register.value = data.value;
+          register.value = data.value; // Aggiorna il valore del registro esistente
         } else {
-          this.registers.push({ address: data.register, value: data.value });
+          this.registers.push({ address: register.address, value: data.value }); // Aggiungi un nuovo registro se non esiste
         }
       });
-
+      
       // Aggiorna la struttura dataSource
       this.dataSource = this.registers.map(reg => ({
         registro: reg.address,
-        valore: reg.value,
-        azioni: ''
+        valore: reg.value
       }));
 
       console.log('Registers loaded:', this.registers);
@@ -123,7 +121,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   parseRegistersInput() {
     // Rimuove eventuali spazi o virgole in eccesso
-    const cleanedInput = this.registersInput.replace(/\s+/g, '').replace(/,+/g, ',').replace(/^,|,$/g, '');
+    const cleanedInput = this.registersInput.trim().replace(/\s+/g, '').replace(/,+/g, ',');
+
+    if (cleanedInput === '') {
+        this.registers = [];
+        console.log('Parsed registers:', this.registers);
+        return;
+    }
 
     this.registers = cleanedInput.split(',').map(addr => {
       const parsedAddr = parseInt(addr, 10);
@@ -133,7 +137,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
       return { address: parsedAddr, value: 0 };
     }).filter(register => register !== null);
-  }
+
+    console.log('Parsed registers:', this.registers);
+}
 
   submitForm() {
     this.parseRegistersInput();
@@ -143,7 +149,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       slave: this.slave,
       registers: this.registers
     });
-    this.registers.pop();
     this.loadRegisters();
 
   }
